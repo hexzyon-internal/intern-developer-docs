@@ -5,19 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VERSION File Management | Developer Documentation</title>
     <style>
-        :root {
-            --bg-primary: #0d1117;
-            --bg-secondary: #161b22;
-            --bg-tertiary: #21262d;
-            --text-primary: #c9d1d9;
-            --text-secondary: #8b949e;
-            --accent: #58a6ff;
-            --border: #30363d;
-            --success: #3fb950;
-            --warning: #d29922;
-            --danger: #f85149;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -25,293 +12,325 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
+            font-family: 'Charter', 'Georgia', 'Times New Roman', serif;
+            background: #fff;
+            color: #1a1a1a;
+            line-height: 1.8;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 680px;
             margin: 0 auto;
             padding: 0 24px;
         }
 
         header {
-            border-bottom: 1px solid var(--border);
-            padding: 24px 0;
-            margin-bottom: 48px;
+            background: #fff;
+            border-bottom: 1px solid #e6e6e6;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        h1 {
-            font-size: 32px;
-            font-weight: 600;
-            margin-bottom: 8px;
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 16px;
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #1a1a1a;
+            text-decoration: none;
         }
 
         nav {
-            position: sticky;
-            top: 0;
-            background: var(--bg-primary);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 0;
-            margin-bottom: 32px;
-            z-index: 10;
-        }
-
-        nav ul {
-            list-style: none;
             display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
+            gap: 32px;
         }
 
         nav a {
-            color: var(--text-secondary);
+            color: #6b6b6b;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 15px;
             transition: color 0.2s;
         }
 
         nav a:hover {
-            color: var(--accent);
+            color: #1a1a1a;
         }
 
-        section {
-            margin-bottom: 64px;
+        .breadcrumb {
+            font-size: 14px;
+            color: #757575;
+            margin-bottom: 24px;
+            margin-top: 64px;
+        }
+
+        .breadcrumb a {
+            color: #757575;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: #1a1a1a;
+        }
+
+        h1 {
+            font-size: 52px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 21px;
+            color: #757575;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .meta-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #e6e6e6;
+            margin-bottom: 40px;
+        }
+
+        .meta-item {
+            font-size: 14px;
+            color: #757575;
         }
 
         h2 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border);
+            font-size: 32px;
+            font-weight: 700;
+            margin: 64px 0 24px;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
         }
 
         h3 {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 600;
-            margin-top: 32px;
-            margin-bottom: 16px;
+            margin: 48px 0 20px;
+            line-height: 1.4;
         }
 
         h4 {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
-            margin-top: 24px;
-            margin-bottom: 12px;
+            margin: 32px 0 16px;
         }
 
         p {
-            margin-bottom: 16px;
-            color: var(--text-secondary);
+            font-size: 18px;
+            margin-bottom: 24px;
+            color: #1a1a1a;
+        }
+
+        ul, ol {
+            margin: 24px 0;
+            padding-left: 32px;
+        }
+
+        li {
+            font-size: 18px;
+            margin-bottom: 12px;
         }
 
         code {
-            background: var(--bg-tertiary);
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+            background: #f5f5f5;
             padding: 2px 6px;
             border-radius: 3px;
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-            font-size: 13px;
-            color: var(--text-primary);
+            font-size: 16px;
         }
 
         pre {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 16px;
+            background: #f5f5f5;
+            border-left: 3px solid #1a1a1a;
+            padding: 24px;
             overflow-x: auto;
-            margin: 16px 0;
+            margin: 32px 0;
+            font-size: 15px;
+            line-height: 1.6;
         }
 
         pre code {
             background: transparent;
             padding: 0;
+            font-size: 15px;
         }
 
         .note {
-            background: var(--bg-secondary);
-            border-left: 3px solid var(--accent);
-            padding: 16px;
-            margin: 16px 0;
-            border-radius: 6px;
+            background: #f5f5f5;
+            border-left: 3px solid #1a1a1a;
+            padding: 24px;
+            margin: 32px 0;
+        }
+
+        .note p:last-child {
+            margin-bottom: 0;
         }
 
         .warning {
-            background: var(--bg-secondary);
-            border-left: 3px solid var(--warning);
-            padding: 16px;
-            margin: 16px 0;
-            border-radius: 6px;
+            background: #fff5f5;
+            border-left: 3px solid #c41e3a;
+            padding: 24px;
+            margin: 32px 0;
         }
 
-        .success {
-            background: var(--bg-secondary);
-            border-left: 3px solid var(--success);
-            padding: 16px;
-            margin: 16px 0;
-            border-radius: 6px;
-        }
-
-        ul, ol {
-            margin-left: 24px;
-            margin-bottom: 16px;
-            color: var(--text-secondary);
-        }
-
-        li {
-            margin-bottom: 8px;
+        .warning p:last-child {
+            margin-bottom: 0;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 24px 0;
-            background: var(--bg-secondary);
-            border-radius: 6px;
-            overflow: hidden;
+            margin: 32px 0;
+            font-size: 16px;
         }
 
         th, td {
-            padding: 12px 16px;
+            padding: 16px;
             text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid #e6e6e6;
         }
 
         th {
-            background: var(--bg-tertiary);
             font-weight: 600;
-            color: var(--text-primary);
+            color: #1a1a1a;
         }
 
         td {
-            color: var(--text-secondary);
+            color: #757575;
         }
 
         .scenario {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 20px;
-            margin: 24px 0;
+            border: 1px solid #e6e6e6;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .scenario h3 {
+            margin-top: 0;
         }
 
         .timeline {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 20px;
-            margin: 16px 0;
-            font-family: 'SF Mono', Monaco, monospace;
-            font-size: 13px;
+            background: #f5f5f5;
+            padding: 24px;
+            margin: 24px 0;
+            font-family: 'SF Mono', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.8;
         }
-
-        .timeline-item {
-            padding: 4px 0;
-            color: var(--text-secondary);
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            margin-right: 8px;
-        }
-
-        .badge-major { background: var(--danger); color: white; }
-        .badge-minor { background: var(--warning); color: white; }
-        .badge-patch { background: var(--success); color: white; }
 
         footer {
-            border-top: 1px solid var(--border);
-            padding: 32px 0;
-            margin-top: 64px;
-            text-align: center;
-            color: var(--text-secondary);
+            border-top: 1px solid #e6e6e6;
+            padding: 48px 0;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 14px;
+            color: #757575;
         }
 
         a {
-            color: var(--accent);
-            text-decoration: none;
+            color: #1a1a1a;
+            text-decoration: underline;
+            text-decoration-color: #e6e6e6;
+            transition: text-decoration-color 0.2s;
         }
 
         a:hover {
-            text-decoration: underline;
+            text-decoration-color: #1a1a1a;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 16px;
-            margin: 24px 0;
-        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
 
-        .card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 20px;
-        }
+            .subtitle {
+                font-size: 18px;
+            }
 
-        .card h4 {
-            margin-top: 0;
+            h2 {
+                font-size: 28px;
+            }
+
+            h3 {
+                font-size: 22px;
+            }
+
+            p, li {
+                font-size: 17px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <h1>VERSION File Management</h1>
-            <p class="subtitle">Complete guide to semantic versioning and Docker image tagging</p>
+        <div class="header-content">
+            <a href="../" class="logo">DevDocs</a>
+            <nav>
+                <a href="../#guides">Guides</a>
+                <a href="../#resources">Resources</a>
+            </nav>
         </div>
     </header>
 
-    <nav>
-        <div class="container">
+    <main class="container">
+        <div class="breadcrumb">
+            <a href="../">Documentation</a> / VERSION Management
+        </div>
+
+        <h1>VERSION File Management</h1>
+        <p class="subtitle">Complete guide to semantic versioning, VERSION file workflows, and Docker image tagging for our CI/CD pipeline.</p>
+        
+        <div class="meta-info">
+            <span class="meta-item">8 min read</span>
+            <span class="meta-item">Updated Dec 14, 2025</span>
+            <span class="meta-item">Pasindu Jayasinghe</span>
+        </div>
+
+        <h2>VERSION File Format</h2>
+        <p>The VERSION file should contain only the semantic version number in a clean, standardized format.</p>
+        
+        <pre><code>1.0.0</code></pre>
+
+        <div class="note">
+            <h4>Formatting Rules</h4>
             <ul>
-                <li><a href="#format">Format</a></li>
-                <li><a href="#decision-tree">Decision Tree</a></li>
-                <li><a href="#scenarios">Scenarios</a></li>
-                <li><a href="#examples">Examples</a></li>
-                <li><a href="#docker">Docker Tags</a></li>
-                <li><a href="#troubleshooting">Troubleshooting</a></li>
-                <li><a href="#best-practices">Best Practices</a></li>
+                <li>No 'v' prefix in the file</li>
+                <li>No extra whitespace or line breaks</li>
+                <li>Follow semantic versioning: MAJOR.MINOR.PATCH</li>
+                <li>Single line only</li>
             </ul>
         </div>
-    </nav>
 
-    <main class="container">
-        <section id="format">
-            <h2>VERSION File Format</h2>
-            <p>The VERSION file should contain only the semantic version number.</p>
-            
-            <pre><code>1.0.0</code></pre>
-
-            <div class="note">
-                <h4>Formatting Rules</h4>
-                <ul>
-                    <li>No 'v' prefix in the file</li>
-                    <li>No extra whitespace or line breaks</li>
-                    <li>Follow semantic versioning: MAJOR.MINOR.PATCH</li>
-                    <li>Single line only</li>
-                </ul>
-            </div>
-        </section>
-
-        <section id="decision-tree">
-            <h2>Version Bump Decision Tree</h2>
-            
-            <pre><code>Did you make breaking changes?
+        <h2>Version Bump Decision Tree</h2>
+        
+        <pre><code>Did you make breaking changes?
 ├─ YES → Bump MAJOR (1.0.0 → 2.0.0)
 └─ NO
    ├─ Did you add new features?
@@ -319,135 +338,117 @@
    └─ NO
       └─ Did you fix bugs?
          └─ YES → Bump PATCH (1.0.0 → 1.0.1)</code></pre>
-        </section>
 
-        <section id="scenarios">
-            <h2>Common Version Update Scenarios</h2>
+        <h2>Common Version Update Scenarios</h2>
 
-            <div class="scenario">
-                <h3><span class="badge badge-patch">PATCH</span>Scenario 1: Bug Fix</h3>
-                
-                <p><strong>Before:</strong> <code>1.2.3</code></p>
-                <p><strong>After:</strong> <code>1.2.4</code></p>
-                
-                <pre><code>echo "1.2.4" > VERSION
+        <div class="scenario">
+            <h3>Scenario 1: Bug Fix</h3>
+            <p><strong>Before:</strong> <code>1.2.3</code></p>
+            <p><strong>After:</strong> <code>1.2.4</code></p>
+            
+            <pre><code>echo "1.2.4" > VERSION
 git add VERSION
 git commit -m "fix: resolve authentication issue"
 git push origin sync</code></pre>
-                
-                <p><strong>Result:</strong> <code>ghcr.io/username/project:v1.2.4</code></p>
-            </div>
+            
+            <p><strong>Result:</strong> Image tagged as <code>ghcr.io/username/project:v1.2.4</code></p>
+        </div>
 
-            <div class="scenario">
-                <h3><span class="badge badge-minor">MINOR</span>Scenario 2: New Feature</h3>
-                
-                <p><strong>Before:</strong> <code>1.2.4</code></p>
-                <p><strong>After:</strong> <code>1.3.0</code></p>
-                
-                <pre><code>echo "1.3.0" > VERSION
+        <div class="scenario">
+            <h3>Scenario 2: New Feature</h3>
+            <p><strong>Before:</strong> <code>1.2.4</code></p>
+            <p><strong>After:</strong> <code>1.3.0</code></p>
+            
+            <pre><code>echo "1.3.0" > VERSION
 git add VERSION
 git commit -m "feat: add user dashboard"
 git push origin sync</code></pre>
-                
-                <p><strong>Result:</strong> <code>ghcr.io/username/project:v1.3.0</code></p>
-            </div>
+            
+            <p><strong>Result:</strong> Image tagged as <code>ghcr.io/username/project:v1.3.0</code></p>
+        </div>
 
-            <div class="scenario">
-                <h3><span class="badge badge-major">MAJOR</span>Scenario 3: Breaking Change</h3>
-                
-                <p><strong>Before:</strong> <code>1.3.0</code></p>
-                <p><strong>After:</strong> <code>2.0.0</code></p>
-                
-                <pre><code>echo "2.0.0" > VERSION
+        <div class="scenario">
+            <h3>Scenario 3: Breaking Change</h3>
+            <p><strong>Before:</strong> <code>1.3.0</code></p>
+            <p><strong>After:</strong> <code>2.0.0</code></p>
+            
+            <pre><code>echo "2.0.0" > VERSION
 git add VERSION
 git commit -m "feat!: migrate to new API v2"
 git push origin sync</code></pre>
-                
-                <p><strong>Result:</strong> <code>ghcr.io/username/project:v2.0.0</code></p>
-            </div>
-        </section>
+            
+            <p><strong>Result:</strong> Image tagged as <code>ghcr.io/username/project:v2.0.0</code></p>
+        </div>
 
-        <section id="examples">
-            <h2>Real-World Examples</h2>
+        <h2>Real-World Examples</h2>
 
-            <h3>Example 1: Mobile App Project</h3>
-            <div class="timeline">
-                <div class="timeline-item">v1.0.0  → Initial release</div>
-                <div class="timeline-item">v1.0.1  → Fix login crash</div>
-                <div class="timeline-item">v1.0.2  → Fix payment processing</div>
-                <div class="timeline-item">v1.1.0  → Add dark mode</div>
-                <div class="timeline-item">v1.2.0  → Add social sharing</div>
-                <div class="timeline-item">v1.2.1  → Fix dark mode toggle</div>
-                <div class="timeline-item">v2.0.0  → Complete UI redesign (breaking)</div>
-            </div>
+        <h3>Example 1: Mobile App Project</h3>
+        <div class="timeline">v1.0.0  → Initial release
+v1.0.1  → Fix login crash
+v1.0.2  → Fix payment processing
+v1.1.0  → Add dark mode
+v1.2.0  → Add social sharing
+v1.2.1  → Fix dark mode toggle
+v2.0.0  → Complete UI redesign (breaking)</div>
 
-            <h3>Example 2: REST API Service</h3>
-            <div class="timeline">
-                <div class="timeline-item">v1.0.0  → Initial API release</div>
-                <div class="timeline-item">v1.0.1  → Fix response format</div>
-                <div class="timeline-item">v1.1.0  → Add /users endpoint</div>
-                <div class="timeline-item">v1.1.1  → Fix /users pagination</div>
-                <div class="timeline-item">v1.2.0  → Add /products endpoint</div>
-                <div class="timeline-item">v2.0.0  → Change auth from JWT to OAuth (breaking)</div>
-            </div>
+        <h3>Example 2: REST API Service</h3>
+        <div class="timeline">v1.0.0  → Initial API release
+v1.0.1  → Fix response format
+v1.1.0  → Add /users endpoint
+v1.1.1  → Fix /users pagination
+v1.2.0  → Add /products endpoint
+v2.0.0  → Change auth from JWT to OAuth (breaking)</div>
 
-            <h3>Example 3: Component Library</h3>
-            <div class="timeline">
-                <div class="timeline-item">v0.1.0  → Initial alpha release</div>
-                <div class="timeline-item">v0.2.0  → Add Button component</div>
-                <div class="timeline-item">v0.3.0  → Add Input component</div>
-                <div class="timeline-item">v1.0.0  → Stable release</div>
-                <div class="timeline-item">v1.0.1  → Fix Button hover state</div>
-                <div class="timeline-item">v1.1.0  → Add Card component</div>
-                <div class="timeline-item">v2.0.0  → Remove deprecated props (breaking)</div>
-            </div>
-        </section>
+        <h3>Example 3: Component Library</h3>
+        <div class="timeline">v0.1.0  → Initial alpha release
+v0.2.0  → Add Button component
+v0.3.0  → Add Input component
+v1.0.0  → Stable release
+v1.0.1  → Fix Button hover state
+v1.1.0  → Add Card component
+v2.0.0  → Remove deprecated props (breaking)</div>
 
-        <section id="docker">
-            <h2>Docker Image Tag Examples</h2>
+        <h2>Docker Image Tag Examples</h2>
 
-            <h3>Single Repository</h3>
-            <p><strong>VERSION file:</strong> <code>1.2.3</code></p>
-            <p><strong>Generated tags:</strong></p>
-            <pre><code>ghcr.io/username/my-app:v1.2.3
+        <h3>Single Repository</h3>
+        <p><strong>VERSION file:</strong> <code>1.2.3</code></p>
+        <p><strong>Generated tags:</strong></p>
+        <pre><code>ghcr.io/username/my-app:v1.2.3
 ghcr.io/username/my-app:latest</code></pre>
 
-            <p><strong>Docker Compose:</strong></p>
-            <pre><code>services:
+        <p><strong>Docker Compose:</strong></p>
+        <pre><code>services:
   app:
     image: ghcr.io/username/my-app:v1.2.3</code></pre>
 
-            <h3>Multiple Repositories (Microservices)</h3>
-            
-            <div class="grid">
-                <div class="card">
-                    <h4>user-service</h4>
-                    <p>VERSION: <code>2.0.5</code></p>
-                    <p>Tags: <code>ghcr.io/username/user-service:v2.0.5</code></p>
-                </div>
-                <div class="card">
-                    <h4>api-gateway</h4>
-                    <p>VERSION: <code>3.1.2</code></p>
-                    <p>Tags: <code>ghcr.io/username/api-gateway:v3.1.2</code></p>
-                </div>
-            </div>
+        <h3>Multiple Repositories (Microservices)</h3>
+        
+        <p><strong>Repository: user-service</strong></p>
+        <ul>
+            <li>VERSION: <code>2.0.5</code></li>
+            <li>Tags: <code>ghcr.io/username/user-service:v2.0.5</code>, <code>latest</code></li>
+        </ul>
 
-            <p><strong>Docker Compose:</strong></p>
-            <pre><code>services:
+        <p><strong>Repository: api-gateway</strong></p>
+        <ul>
+            <li>VERSION: <code>3.1.2</code></li>
+            <li>Tags: <code>ghcr.io/username/api-gateway:v3.1.2</code>, <code>latest</code></li>
+        </ul>
+
+        <p><strong>Docker Compose:</strong></p>
+        <pre><code>services:
   user-service:
     image: ghcr.io/username/user-service:v2.0.5
     
   api-gateway:
     image: ghcr.io/username/api-gateway:v3.1.2</code></pre>
-        </section>
 
-        <section id="troubleshooting">
-            <h2>Troubleshooting</h2>
+        <h2>Troubleshooting</h2>
 
-            <h3>Workflow doesn't read VERSION</h3>
-            <div class="warning">
-                <p><strong>Problem:</strong> Workflow fails with "VERSION file not found"</p>
-                <pre><code># Ensure VERSION file exists in repository root
+        <h3>Workflow doesn't read VERSION</h3>
+        <div class="warning">
+            <p><strong>Problem:</strong> Workflow fails with "VERSION file not found"</p>
+            <pre><code># Ensure VERSION file exists in repository root
 ls -la VERSION
 
 # If missing, create it
@@ -455,22 +456,22 @@ echo "1.0.0" > VERSION
 git add VERSION
 git commit -m "Add VERSION file"
 git push</code></pre>
-            </div>
+        </div>
 
-            <h3>Image tagged incorrectly</h3>
-            <div class="warning">
-                <p><strong>Problem:</strong> Image shows as <code>v.1.0.0</code> instead of <code>v1.0.0</code></p>
-                <pre><code># Remove any whitespace or invalid characters
+        <h3>Image tagged incorrectly</h3>
+        <div class="warning">
+            <p><strong>Problem:</strong> Image shows as <code>v.1.0.0</code> instead of <code>v1.0.0</code></p>
+            <pre><code># Remove any whitespace or invalid characters
 cat VERSION | tr -d '[:space:]' > VERSION.tmp && mv VERSION.tmp VERSION
 git add VERSION
 git commit -m "Fix VERSION file format"
 git push</code></pre>
-            </div>
+        </div>
 
-            <h3>Using pre-release versions</h3>
-            <div class="success">
-                <p><strong>Solution:</strong> Pre-release versions are supported!</p>
-                <pre><code># Beta release
+        <h3>Using pre-release versions</h3>
+        <div class="note">
+            <p><strong>Solution:</strong> Pre-release versions are supported!</p>
+            <pre><code># Beta release
 echo "1.0.0-beta" > VERSION
 
 # Release candidate
@@ -478,67 +479,62 @@ echo "2.0.0-rc.1" > VERSION
 
 # Production release
 echo "2.0.0" > VERSION</code></pre>
-                <p><strong>Results:</strong></p>
-                <ul>
-                    <li><code>ghcr.io/username/project:v1.0.0-beta</code></li>
-                    <li><code>ghcr.io/username/project:v2.0.0-rc.1</code></li>
-                    <li><code>ghcr.io/username/project:v2.0.0</code></li>
-                </ul>
-            </div>
-        </section>
+            <p><strong>Results:</strong></p>
+            <ul>
+                <li><code>ghcr.io/username/project:v1.0.0-beta</code></li>
+                <li><code>ghcr.io/username/project:v2.0.0-rc.1</code></li>
+                <li><code>ghcr.io/username/project:v2.0.0</code></li>
+            </ul>
+        </div>
 
-        <section id="best-practices">
-            <h2>Best Practices</h2>
-            <ol>
-                <li>Always use semantic versioning (MAJOR.MINOR.PATCH)</li>
-                <li>Keep VERSION file clean (no extra whitespace)</li>
-                <li>Commit version changes separately (clear commit message)</li>
-                <li>Use descriptive commit messages (helps track changes)</li>
-                <li>Review changes before version bump (choose correct bump type)</li>
-                <li>Test before major bumps (breaking changes need verification)</li>
-                <li>Document breaking changes (in commit message or CHANGELOG)</li>
-            </ol>
-        </section>
+        <h2>Best Practices</h2>
+        <ol>
+            <li>Always use semantic versioning (MAJOR.MINOR.PATCH)</li>
+            <li>Keep VERSION file clean (no extra whitespace)</li>
+            <li>Commit version changes separately (clear commit message)</li>
+            <li>Use descriptive commit messages (helps track changes)</li>
+            <li>Review changes before version bump (choose correct bump type)</li>
+            <li>Test before major bumps (breaking changes need verification)</li>
+            <li>Document breaking changes (in commit message or CHANGELOG)</li>
+        </ol>
 
-        <section id="semver">
-            <h2>Understanding Semantic Versioning</h2>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>Component</th>
-                        <th>Format</th>
-                        <th>When to Use</th>
-                        <th>Example</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>MAJOR</strong></td>
-                        <td>X.0.0</td>
-                        <td>Incompatible API changes, breaking changes</td>
-                        <td>Removing endpoints, changing response structure</td>
-                    </tr>
-                    <tr>
-                        <td><strong>MINOR</strong></td>
-                        <td>0.X.0</td>
-                        <td>New features, backward compatible</td>
-                        <td>Adding new endpoints, new optional parameters</td>
-                    </tr>
-                    <tr>
-                        <td><strong>PATCH</strong></td>
-                        <td>0.0.X</td>
-                        <td>Bug fixes, backward compatible</td>
-                        <td>Fixing crashes, security patches</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+        <h2>Understanding Semantic Versioning</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Format</th>
+                    <th>When to Use</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>MAJOR</strong></td>
+                    <td>X.0.0</td>
+                    <td>Incompatible API changes, breaking changes</td>
+                    <td>Removing endpoints, changing response structure</td>
+                </tr>
+                <tr>
+                    <td><strong>MINOR</strong></td>
+                    <td>0.X.0</td>
+                    <td>New features, backward compatible</td>
+                    <td>Adding new endpoints, new optional parameters</td>
+                </tr>
+                <tr>
+                    <td><strong>PATCH</strong></td>
+                    <td>0.0.X</td>
+                    <td>Bug fixes, backward compatible</td>
+                    <td>Fixing crashes, security patches</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <section id="commits">
-            <h2>Commit Message Convention</h2>
-            <p>Follow conventional commits for clarity and consistency:</p>
-            <pre><code># Features
+        <h2>Commit Message Convention</h2>
+        <p>Follow conventional commits for clarity and consistency:</p>
+        
+        <pre><code># Features
 git commit -m "feat: add user authentication"
 
 # Bug fixes
@@ -555,22 +551,21 @@ git commit -m "docs: update API documentation"
 
 # Performance improvements
 git commit -m "perf: optimize database queries"</code></pre>
-        </section>
 
-        <section id="resources">
-            <h2>Additional Resources</h2>
-            <ul>
-                <li><a href="https://semver.org/" target="_blank">Semantic Versioning Official Spec</a></li>
-                <li><a href="https://www.conventionalcommits.org/" target="_blank">Conventional Commits</a></li>
-                <li><a href="https://docs.github.com/en/packages" target="_blank">GitHub Container Registry Documentation</a></li>
-            </ul>
-        </section>
+        <h2>Additional Resources</h2>
+        <ul>
+            <li><a href="https://semver.org/" target="_blank">Semantic Versioning Official Spec</a></li>
+            <li><a href="https://www.conventionalcommits.org/" target="_blank">Conventional Commits</a></li>
+            <li><a href="https://docs.github.com/en/packages" target="_blank">GitHub Container Registry Documentation</a></li>
+        </ul>
     </main>
 
     <footer>
         <div class="container">
-            <p>VERSION File Management Guide | Internal Development Documentation</p>
-            <p>Last Updated: December 2024 | Author: Pasindu Lakshitha Jayasinghe</p>
+            <div class="footer-content">
+                <span>© 2024 Internal Developer Documentation</span>
+                <span>Maintained by Pasindu Lakshitha Jayasinghe</span>
+            </div>
         </div>
     </footer>
 </body>

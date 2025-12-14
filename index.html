@@ -12,10 +12,16 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: #fafafa;
-            color: #242424;
-            line-height: 1.7;
+            font-family: 'Charter', 'Georgia', 'Times New Roman', serif;
+            background: #fff;
+            color: #1a1a1a;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
         header {
@@ -39,7 +45,8 @@
             font-size: 24px;
             font-weight: 700;
             letter-spacing: -0.5px;
-            color: #242424;
+            color: #1a1a1a;
+            text-decoration: none;
         }
 
         nav {
@@ -55,342 +62,203 @@
         }
 
         nav a:hover {
-            color: #242424;
+            color: #1a1a1a;
         }
 
         .hero {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 120px 32px 80px;
+            margin-bottom: 80px;
         }
 
-        .hero h1 {
-            font-size: 72px;
+        h1 {
+            font-size: 52px;
             font-weight: 700;
-            letter-spacing: -2px;
-            line-height: 1.1;
+            line-height: 1.2;
             margin-bottom: 24px;
-            color: #242424;
+            letter-spacing: -0.02em;
         }
 
-        .hero-subtitle {
+        .subtitle {
+            font-size: 21px;
+            color: #757575;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .meta-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #e6e6e6;
+            margin-bottom: 40px;
+        }
+
+        .meta-item {
+            font-size: 14px;
+            color: #757575;
+        }
+
+        .meta-item strong {
+            color: #1a1a1a;
+        }
+
+        section {
+            margin-bottom: 80px;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
             font-size: 24px;
-            color: #6b6b6b;
-            max-width: 600px;
-            margin-bottom: 48px;
+            font-weight: 600;
+            margin-top: 48px;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 24px;
+            color: #1a1a1a;
+        }
+
+        .doc-list {
+            list-style: none;
+            margin: 32px 0;
+        }
+
+        .doc-item {
+            border-bottom: 1px solid #e6e6e6;
+            padding: 32px 0;
+        }
+
+        .doc-item:last-child {
+            border-bottom: none;
+        }
+
+        .doc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 16px;
+        }
+
+        .doc-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .doc-title:hover {
+            opacity: 0.6;
+        }
+
+        .doc-status {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #757575;
+        }
+
+        .doc-status.ready {
+            color: #0f9960;
+        }
+
+        .doc-description {
+            font-size: 16px;
+            color: #757575;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .doc-meta {
+            font-size: 14px;
+            color: #757575;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .resource-card {
+            border: 1px solid #e6e6e6;
+            padding: 24px;
+            transition: border-color 0.2s;
+        }
+
+        .resource-card:hover {
+            border-color: #1a1a1a;
+        }
+
+        .resource-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .resource-title a {
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .resource-description {
+            font-size: 15px;
+            color: #757575;
             line-height: 1.5;
         }
 
-        .stats {
-            display: flex;
-            gap: 48px;
-            margin-top: 48px;
-        }
-
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .stat-number {
-            font-size: 32px;
-            font-weight: 700;
-            color: #242424;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: #6b6b6b;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 4px;
-        }
-
-        .content-section {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 80px 32px;
-        }
-
-        .section-header {
-            margin-bottom: 56px;
-        }
-
-        .section-title {
-            font-size: 14px;
-            color: #6b6b6b;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-        }
-
-        .section-heading {
-            font-size: 42px;
-            font-weight: 700;
-            letter-spacing: -1px;
-            color: #242424;
-        }
-
-        .articles-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 48px;
-        }
-
-        .article-card {
-            background: #fff;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .article-card:hover {
-            transform: translateY(-4px);
-        }
-
-        .article-image {
-            width: 100%;
-            aspect-ratio: 16/10;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin-bottom: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .article-card:nth-child(2) .article-image {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .article-card:nth-child(3) .article-image {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        .article-tag {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 6px 12px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-radius: 2px;
-        }
-
-        .article-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .author-avatar {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: #e6e6e6;
-        }
-
-        .author-name {
-            font-size: 13px;
-            color: #6b6b6b;
-        }
-
-        .read-time {
-            font-size: 13px;
-            color: #6b6b6b;
-        }
-
-        .read-time::before {
-            content: '·';
-            margin-right: 8px;
-        }
-
-        .article-title {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 12px;
-            line-height: 1.3;
-            color: #242424;
-        }
-
-        .article-excerpt {
-            font-size: 16px;
-            color: #6b6b6b;
-            line-height: 1.6;
-            margin-bottom: 16px;
-        }
-
-        .article-link {
-            display: inline-flex;
-            align-items: center;
-            color: #242424;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .article-link::after {
-            content: '→';
-            margin-left: 8px;
-            transition: transform 0.2s;
-        }
-
-        .article-link:hover::after {
-            transform: translateX(4px);
-        }
-
-        .featured-section {
-            background: #242424;
-            color: #fff;
-            margin: 80px 0;
-        }
-
-        .featured-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 120px 32px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
-        }
-
-        .featured-text h2 {
-            font-size: 48px;
-            font-weight: 700;
-            letter-spacing: -1px;
-            margin-bottom: 24px;
-        }
-
-        .featured-text p {
-            font-size: 20px;
-            line-height: 1.6;
-            color: #b3b3b3;
-            margin-bottom: 32px;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: #fff;
-            color: #242424;
-            padding: 14px 32px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-            border-radius: 4px;
-            transition: transform 0.2s;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-        }
-
-        .featured-visual {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            aspect-ratio: 4/3;
-            border-radius: 8px;
-        }
-
         footer {
-            background: #fff;
             border-top: 1px solid #e6e6e6;
+            padding: 48px 0;
+            margin-top: 80px;
         }
 
         .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 64px 32px;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 64px;
-        }
-
-        .footer-about h3 {
-            font-size: 18px;
-            margin-bottom: 16px;
-        }
-
-        .footer-about p {
-            color: #6b6b6b;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .footer-links h4 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: #6b6b6b;
-            text-decoration: none;
-            font-size: 15px;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: #242424;
-        }
-
-        .footer-bottom {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 32px 32px;
-            border-top: 1px solid #e6e6e6;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: #6b6b6b;
             font-size: 14px;
-        }
-
-        @media (max-width: 1024px) {
-            .articles-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .featured-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .hero h1 {
-                font-size: 48px;
-            }
+            color: #757575;
         }
 
         @media (max-width: 768px) {
-            .hero h1 {
+            h1 {
                 font-size: 36px;
             }
-            
-            .hero-subtitle {
+
+            .subtitle {
                 font-size: 18px;
             }
-            
-            .stats {
-                flex-direction: column;
-                gap: 24px;
+
+            h2 {
+                font-size: 28px;
             }
-            
-            .footer-content {
+
+            .resources-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .doc-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
             }
         }
     </style>
@@ -398,165 +266,99 @@
 <body>
     <header>
         <div class="header-content">
-            <div class="logo">DevDocs</div>
+            <a href="/" class="logo">DevDocs</a>
             <nav>
-                <a href="#documentation">Documentation</a>
                 <a href="#guides">Guides</a>
                 <a href="#resources">Resources</a>
             </nav>
         </div>
     </header>
 
-    <section class="hero">
-        <h1>Building better<br>software, together</h1>
-        <p class="hero-subtitle">Essential documentation and guides for our development team. Everything you need to ship quality code.</p>
-        
-        <div class="stats">
-            <div class="stat-item">
-                <span class="stat-number">3</span>
-                <span class="stat-label">Guides</span>
+    <main class="container">
+        <section class="hero">
+            <h1>Building better software, together</h1>
+            <p class="subtitle">Essential documentation and guides for our development team. Everything you need to ship quality code.</p>
+            
+            <div class="meta-info">
+                <span class="meta-item"><strong>3</strong> guides</span>
+                <span class="meta-item"><strong>6</strong> external resources</span>
+                <span class="meta-item">Updated <strong>Dec 2025</strong></span>
             </div>
-            <div class="stat-item">
-                <span class="stat-number">12+</span>
-                <span class="stat-label">Resources</span>
+        </section>
+
+        <section id="guides">
+            <h2>Documentation</h2>
+            
+            <ul class="doc-list">
+                <li class="doc-item">
+                    <div class="doc-header">
+                        <a href="version-management/" class="doc-title">VERSION File Management</a>
+                        <span class="doc-status ready">Ready</span>
+                    </div>
+                    <p class="doc-description">Complete guide to semantic versioning and VERSION file workflows. Learn how to properly version your applications, understand MAJOR.MINOR.PATCH conventions, and automate Docker image tagging through our CI/CD pipeline.</p>
+                    <div class="doc-meta">8 minute read · Updated Dec 14, 2025</div>
+                </li>
+
+                <li class="doc-item">
+                    <div class="doc-header">
+                        <a href="docker/" class="doc-title">Docker Development Guide</a>
+                        <span class="doc-status">Coming Soon</span>
+                    </div>
+                    <p class="doc-description">Learn containerization fundamentals, multi-stage builds, image optimization techniques, and production deployment strategies. Covers Docker Compose, networking, volumes, and security best practices.</p>
+                    <div class="doc-meta">Estimated 12 minute read</div>
+                </li>
+
+                <li class="doc-item">
+                    <div class="doc-header">
+                        <a href="workflows/" class="doc-title">Git Workflows & CI/CD</a>
+                        <span class="doc-status">Coming Soon</span>
+                    </div>
+                    <p class="doc-description">Our branching strategy, pull request process, code review guidelines, and automated deployment pipelines. Includes GitHub Actions configurations and merge policies.</p>
+                    <div class="doc-meta">Estimated 10 minute read</div>
+                </li>
+            </ul>
+        </section>
+
+        <section id="resources">
+            <h2>External Resources</h2>
+            
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-title">
+                        <a href="https://semver.org/" target="_blank">Semantic Versioning</a>
+                    </div>
+                    <p class="resource-description">Official specification for version numbering. Required reading for understanding versioning principles.</p>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-title">
+                        <a href="https://www.conventionalcommits.org/" target="_blank">Conventional Commits</a>
+                    </div>
+                    <p class="resource-description">Commit message convention used across all our projects for automated changelogs.</p>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-title">
+                        <a href="https://docs.github.com/" target="_blank">GitHub Documentation</a>
+                    </div>
+                    <p class="resource-description">Comprehensive guides on repositories, actions, packages, and GitHub features.</p>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-title">
+                        <a href="https://docs.docker.com/" target="_blank">Docker Documentation</a>
+                    </div>
+                    <p class="resource-description">Official Docker documentation covering all aspects of containerization.</p>
+                </div>
             </div>
-            <div class="stat-item">
-                <span class="stat-number">Active</span>
-                <span class="stat-label">Maintained</span>
-            </div>
-        </div>
-    </section>
-
-    <section class="content-section" id="documentation">
-        <div class="section-header">
-            <div class="section-title">Documentation</div>
-            <h2 class="section-heading">Core development guides</h2>
-        </div>
-
-        <div class="articles-grid">
-            <article class="article-card" onclick="window.location.href='version-management/'">
-                <div class="article-image">
-                    <span class="article-tag">Ready to use</span>
-                </div>
-                <div class="article-meta">
-                    <div class="author-avatar"></div>
-                    <span class="author-name">Pasindu Jayasinghe</span>
-                    <span class="read-time">8 min read</span>
-                </div>
-                <h3 class="article-title">VERSION File Management</h3>
-                <p class="article-excerpt">Master semantic versioning, VERSION file workflows, and Docker image tagging. Learn when to bump major, minor, and patch versions.</p>
-                <a href="version-management/" class="article-link">Read guide</a>
-            </article>
-
-            <article class="article-card" onclick="window.location.href='docker/'">
-                <div class="article-image">
-                    <span class="article-tag">Coming soon</span>
-                </div>
-                <div class="article-meta">
-                    <div class="author-avatar"></div>
-                    <span class="author-name">DevOps Team</span>
-                    <span class="read-time">12 min read</span>
-                </div>
-                <h3 class="article-title">Docker Best Practices</h3>
-                <p class="article-excerpt">Comprehensive guide to containerization, multi-stage builds, optimization techniques, and production deployment strategies.</p>
-                <a href="docker/" class="article-link">Coming soon</a>
-            </article>
-
-            <article class="article-card" onclick="window.location.href='workflows/'">
-                <div class="article-image">
-                    <span class="article-tag">Coming soon</span>
-                </div>
-                <div class="article-meta">
-                    <div class="author-avatar"></div>
-                    <span class="author-name">Engineering Team</span>
-                    <span class="read-time">10 min read</span>
-                </div>
-                <h3 class="article-title">Git Workflows & CI/CD</h3>
-                <p class="article-excerpt">Learn our branching strategy, pull request process, code review guidelines, and automated deployment pipelines.</p>
-                <a href="workflows/" class="article-link">Coming soon</a>
-            </article>
-        </div>
-    </section>
-
-    <section class="featured-section">
-        <div class="featured-content">
-            <div class="featured-text">
-                <h2>Start with the essentials</h2>
-                <p>New to the team? Begin with our VERSION management guide. It covers everything from semantic versioning basics to advanced Docker workflows.</p>
-                <a href="version-management/" class="cta-button">Get started</a>
-            </div>
-            <div class="featured-visual"></div>
-        </div>
-    </section>
-
-    <section class="content-section" id="resources">
-        <div class="section-header">
-            <div class="section-title">Resources</div>
-            <h2 class="section-heading">External references</h2>
-        </div>
-
-        <div class="articles-grid">
-            <article class="article-card" onclick="window.open('https://semver.org/', '_blank')">
-                <div class="article-image" style="background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);"></div>
-                <h3 class="article-title">Semantic Versioning</h3>
-                <p class="article-excerpt">Official specification for version numbering. Essential reading for understanding MAJOR.MINOR.PATCH.</p>
-                <a href="https://semver.org/" target="_blank" class="article-link">Visit site</a>
-            </article>
-
-            <article class="article-card" onclick="window.open('https://www.conventionalcommits.org/', '_blank')">
-                <div class="article-image" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);"></div>
-                <h3 class="article-title">Conventional Commits</h3>
-                <p class="article-excerpt">Learn the commit message convention we use across all projects for clear, automated changelogs.</p>
-                <a href="https://www.conventionalcommits.org/" target="_blank" class="article-link">Visit site</a>
-            </article>
-
-            <article class="article-card" onclick="window.open('https://docs.github.com/', '_blank')">
-                <div class="article-image" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);"></div>
-                <h3 class="article-title">GitHub Documentation</h3>
-                <p class="article-excerpt">Comprehensive guides on repositories, actions, packages, and everything GitHub related.</p>
-                <a href="https://docs.github.com/" target="_blank" class="article-link">Visit site</a>
-            </article>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <footer>
-        <div class="footer-content">
-            <div class="footer-about">
-                <h3>Developer Documentation</h3>
-                <p>Internal knowledge base for development standards, workflows, and best practices. Maintained by the engineering team.</p>
+        <div class="container">
+            <div class="footer-content">
+                <span>Maintained by Pasindu Lakshitha Jayasinghe</span>
             </div>
-            
-            <div class="footer-links">
-                <h4>Documentation</h4>
-                <ul>
-                    <li><a href="version-management/">VERSION Management</a></li>
-                    <li><a href="docker/">Docker Guide</a></li>
-                    <li><a href="workflows/">Git Workflows</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-links">
-                <h4>Resources</h4>
-                <ul>
-                    <li><a href="https://semver.org/" target="_blank">Semantic Versioning</a></li>
-                    <li><a href="https://www.conventionalcommits.org/" target="_blank">Conventional Commits</a></li>
-                    <li><a href="https://docs.github.com/" target="_blank">GitHub Docs</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-links">
-                <h4>About</h4>
-                <ul>
-                    <li><a href="#team">Team</a></li>
-                    <li><a href="#contribute">Contribute</a></li>
-                    <li><a href="#changelog">Changelog</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <span>© 2024 Developer Documentation</span>
-            <span>Maintained by Pasindu Lakshitha Jayasinghe</span>
         </div>
     </footer>
 </body>
