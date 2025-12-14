@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Documentation | Internal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap');
+
+        :root {
+            --bg-deep: #02040a;
+            --bg-surface: #0a0f1c;
+            --bg-surface-highlight: #121b2e;
+
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-accent: #38bdf8;
+
+            --grid-line: rgba(56, 189, 248, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        /* Noise Texture */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Aurora Background */
+        .aurora-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .aurora {
+            position: absolute;
+            background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.15), rgba(99, 102, 241, 0.05), transparent 60%);
+            width: 160%;
+            height: 160%;
+            top: -30%;
+            left: -30%;
+            filter: blur(80px);
+            animation: auroraMove 20s infinite alternate ease-in-out;
+            opacity: 0.6;
+        }
+
+        .aurora-secondary {
+            position: absolute;
+            background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.1), transparent 60%);
+            width: 120%;
+            height: 120%;
+            bottom: -20%;
+            right: -20%;
+            filter: blur(100px);
+            animation: auroraMove 25s infinite alternate-reverse ease-in-out;
+            opacity: 0.4;
+        }
+
+        @keyframes auroraMove {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(-50px, 20px) scale(1.1);
+            }
+        }
+
+        /* Grid Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            border-right: 1px solid var(--card-border);
+            padding: 40px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: rgba(2, 4, 10, 0.85);
+            backdrop-filter: blur(20px);
+        }
+
+        .logo {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0.9;
+        }
+
+        .logo::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--text-accent);
+            box-shadow: 0 0 16px var(--text-accent);
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 80px;
+        }
+
+        .nav-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            padding-left: 0;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+            padding-left: 20px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-item:hover::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--text-accent);
+        }
+
+        .sidebar-footer {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: rgba(148, 163, 184, 0.3);
+        }
+
+        /* Main Content */
+        .content {
+            padding: 100px 100px 140px;
+            max-width: 1600px;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(56px, 6vw, 110px);
+            font-weight: 400;
+            line-height: 0.95;
+            margin-bottom: 48px;
+            background: linear-gradient(180deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.03em;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 560px;
+            line-height: 1.6;
+            margin-bottom: 100px;
+            font-weight: 300;
+            border-left: 1px solid rgba(56, 189, 248, 0.3);
+            padding-left: 32px;
+        }
+
+        /* Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 32px;
+            margin-bottom: 140px;
+        }
+
+        /* Card System */
+        .card {
+            background: rgba(10, 15, 28, 0.6);
+            border: 1px solid var(--card-border);
+            padding: 48px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 380px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            /* JS handles tilt */
+        }
+
+        .card.featured {
+            grid-column: span 2;
+            background: linear-gradient(145deg, rgba(15, 22, 35, 0.8) 0%, rgba(2, 4, 10, 0.9) 100%);
+        }
+
+        /* Spotlight Gradient Overlay */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.04), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        /* Border Glow */
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(56, 189, 248, 0.15), transparent 40%);
+            opacity: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .card:hover::after {
+            opacity: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            padding: 8px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            color: var(--text-accent);
+            background: rgba(56, 189, 248, 0.05);
+            letter-spacing: 0.5px;
+        }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-weight: 400;
+            color: var(--text-primary);
+            line-height: 1.1;
+        }
+
+        .card-desc {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .card-meta {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--card-border);
+            padding-top: 32px;
+        }
+
+        .arrow-icon {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .card:hover .arrow-icon {
+            transform: translateX(6px) translateY(-6px);
+            stroke: var(--text-accent);
+        }
+
+        /* Resources Section */
+        .resources-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: rgba(255, 255, 255, 0.05);
+            /* Separator color */
+            border: 1px solid var(--card-border);
+            margin-top: 40px;
+        }
+
+        .resource-item {
+            background: var(--bg-deep);
+            /* Card bg */
+            padding: 40px;
+            transition: background 0.3s;
+            position: relative;
+        }
+
+        .resource-item:hover {
+            background: var(--bg-surface);
+        }
+
+        .resource-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .resource-title {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: block;
+            letter-spacing: 0.5px;
+        }
+
+        .resource-desc {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .page-footer {
+            margin-top: 160px;
+            padding-top: 60px;
+            border-top: 1px solid var(--card-border);
+            text-align: center;
+        }
+
+        .footer-signature {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .footer-signature:hover {
+            opacity: 1;
+            color: var(--text-accent);
+        }
+
+        /* Mobile */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--card-border);
+                flex-direction: row;
+                align-items: center;
+                padding: 24px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .content {
+                padding: 60px 24px;
+            }
+
+            .card.featured {
+                grid-column: span 1;
+            }
+
+            .resources-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="noise-overlay"></div>
+    <div class="aurora-container">
+        <div class="aurora"></div>
+        <div class="aurora-secondary"></div>
+    </div>
+
+    <div class="main-grid">
+        <aside class="sidebar">
+            <a href="/" class="logo">INTERNAL / DOCS</a>
+
+            <nav class="nav-links">
+                <a href="#guides" class="nav-item">Guides</a>
+                <a href="#resources" class="nav-item">Resources</a>
+                <a href="#" class="nav-item">API Spec</a>
+            </nav>
+
+            <div class="sidebar-footer">
+                v2.5.0 STABLE
+            </div>
+        </aside>
+
+        <main class="content">
+            <header>
+                <h1>Architecting the<br>Future Standard.</h1>
+                <p class="subtitle">The definitive knowledge base for our engineering protocols. Built for clarity,
+                    precision, and scale.</p>
+            </header>
+
+            <section id="guides" class="bento-grid">
+                <!-- Featured Card -->
+                <div class="card featured" onclick="window.location.href='version-management/'">
+                    <div class="card-content">
+                        <div class="card-tags">
+                            <span class="tag">CORE PROTOCOL</span>
+                            <span class="tag">UPDATED DEC 14</span>
+                        </div>
+                        <h2 class="card-title">Semantic Versioning Control</h2>
+                        <p class="card-desc">The single source of truth for versioning across our distributed systems.
+                            Learn the methodology behind our release cycles and automated tagging pipelines.</p>
+                    </div>
+                    <div class="card-meta">
+                        <span>8 MIN READ</span>
+                        <svg class="arrow-icon" viewBox="0 0 24 24">
+                            <path d="M7 17L17 7M17 7H7M17 7V17" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Regular Card -->
+                <div class="card" onclick="window.location.href='docker/'">
+                    <div class="card-content">
+                        <div class="card-tags">
+                            <span class="tag">INFRASTRUCTURE</span>
+                        </div>
+                        <h2 class="card-title">Docker Containerization</h2>
+                        <p class="card-desc">Optimization formats and multi-stage build strategies for production
+                            environments.</p>
+                    </div>
+                    <div class="card-meta">
+                        <span>COMING SOON</span>
+                        <svg class="arrow-icon" viewBox="0 0 24 24">
+                            <path d="M7 17L17 7M17 7H7M17 7V17" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Regular Card -->
+                <div class="card" onclick="window.location.href='workflows/'">
+                    <div class="card-content">
+                        <div class="card-tags">
+                            <span class="tag">PROCESS</span>
+                        </div>
+                        <h2 class="card-title">CI/CD Workflows</h2>
+                        <p class="card-desc">Automated pipelines and merge strategies for high-velocity deployment.</p>
+                    </div>
+                    <div class="card-meta">
+                        <span>COMING SOON</span>
+                        <svg class="arrow-icon" viewBox="0 0 24 24">
+                            <path d="M7 17L17 7M17 7H7M17 7V17" />
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <section id="resources">
+                <div
+                    style="margin-bottom: 32px; font-family: var(--font-mono); color: var(--text-secondary); font-size: 13px; letter-spacing: 2px;">
+                    EXTERNAL RESOURCES</div>
+
+                <div class="resources-section">
+                    <div class="resource-item">
+                        <a href="https://semver.org/" target="_blank" class="resource-link">
+                            <span class="resource-title">SemVer 2.0.0 ↗</span>
+                            <span class="resource-desc">Specification</span>
+                        </a>
+                    </div>
+                    <div class="resource-item">
+                        <a href="https://www.conventionalcommits.org/" target="_blank" class="resource-link">
+                            <span class="resource-title">Conventional Commits ↗</span>
+                            <span class="resource-desc">Standards</span>
+                        </a>
+                    </div>
+                    <div class="resource-item">
+                        <a href="https://docs.github.com/" target="_blank" class="resource-link">
+                            <span class="resource-title">GitHub Actions ↗</span>
+                            <span class="resource-desc">Documentation</span>
+                        </a>
+                    </div>
+                    <div class="resource-item">
+                        <a href="https://docs.docker.com/" target="_blank" class="resource-link">
+                            <span class="resource-title">Docker Engine ↗</span>
+                            <span class="resource-desc">Reference</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="page-footer">
+                <div class="footer-signature">
+                    MAINTAINED BY PASINDU LAKSHITHA JAYASINGHE
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // Spotlight Effect + 3D Tilt
+        document.addEventListener('mousemove', e => {
+            const cards = document.getElementsByClassName('card');
+            for (const card of cards) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                // Spotlight pos
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+
+                // Subtle Tilt
+                /* 
+                   Calculate center relative position (-1 to 1) 
+                   Only applying if mouse is somewhat close/over to avoid expensive global calcs
+                */
+                if (x > -50 && x < rect.width + 50 && y > -50 && y < rect.height + 50) {
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -2; // max 2deg rotation
+                    const rotateY = ((x - centerX) / centerX) * 2;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                } else {
+                    card.style.transform = `perspective(1000px) rotateX(0) rotateY(0)`;
+                }
+            }
+        });
+
+        // Reset tilt on leave
+        const cards = document.getElementsByClassName('card');
+        for (const card of cards) {
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0)`;
+            });
+        }
+    </script>
+</body>
+
+</html>
