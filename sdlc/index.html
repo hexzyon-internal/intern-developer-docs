@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEXZYON SDLC - LOW LATENCY</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            /* Palette */
+            --bg-void: #0f172a;
+            --neon-cyan: #22d3ee;
+            --neon-emerald: #34d399;
+            --neon-violet: #a78bfa;
+            --neon-amber: #fbbf24;
+            --neon-rose: #f43f5e;
+
+            --text-dim: #e2e8f0;
+        }
+
+        body {
+            background-color: var(--bg-void);
+            /* PERFORMANCE: Simple solid background with single gradient overly */
+            background-image: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 90%);
+            color: var(--text-dim);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .viewport-scaler {
+            transform-origin: center center;
+            transition: transform 0.2s ease-out;
+            width: 1900px;
+            /* INCREASED WIDTH */
+            height: 1200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            will-change: transform;
+            /* Force GPU layer */
+            transform: translateZ(0);
+        }
+
+        .diagram-wrapper {
+            position: relative;
+            width: 1900px;
+            /* INCREASED WIDTH */
+            height: 1200px;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            /* PERFORMANCE: Removed main box-shadow */
+        }
+
+        /* Title Area */
+        .header {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            pointer-events: none;
+            z-index: 60;
+        }
+
+        .main-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #fff;
+            /* PERFORMANCE: Minimal text shadow */
+            text-shadow: 0 0 5px rgba(6, 182, 212, 0.3);
+            margin: 0;
+        }
+
+        /* SVG Layer */
+        svg.connections {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* === FAST FLOW LINES === */
+        path.wire {
+            fill: none;
+            stroke: #334155;
+            /* Slightly darker */
+            stroke-width: 2;
+        }
+
+        path.stream {
+            fill: none;
+            stroke: var(--neon-cyan);
+            stroke-width: 3;
+            stroke-dasharray: 20 40;
+            /* Fewer dashes to render */
+            opacity: 0.6;
+            animation: streamFlow 4s linear infinite;
+            /* Slower = smoother perception */
+            will-change: stroke-dashoffset;
+        }
+
+        path.stream.active-stream-focus {
+            opacity: 1;
+            /* stroke-width: 4; kept same to avoid line jumps */
+            stroke: #fff;
+            /* No drop shadow */
+            animation: streamFlow 2s linear infinite;
+        }
+
+        @keyframes streamFlow {
+            to {
+                stroke-dashoffset: -60;
+            }
+        }
+
+        /* ZONES */
+        .zone {
+            position: absolute;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .zone-label {
+            position: absolute;
+            top: 25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            pointer-events: none;
+        }
+
+        .zone-label span {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 8px 24px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .zone-corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-color: rgba(255, 255, 255, 0.25);
+            border-style: solid;
+        }
+
+        .zc-tl {
+            top: -1px;
+            left: -1px;
+            border-width: 3px 0 0 3px;
+            border-radius: 16px 0 0 0;
+        }
+
+        .zc-tr {
+            top: -1px;
+            right: -1px;
+            border-width: 3px 3px 0 0;
+            border-radius: 0 16px 0 0;
+        }
+
+        .zc-bl {
+            bottom: -1px;
+            left: -1px;
+            border-width: 0 0 3px 3px;
+            border-radius: 0 0 0 16px;
+        }
+
+        .zc-br {
+            bottom: -1px;
+            right: -1px;
+            border-width: 0 3px 3px 0;
+            border-radius: 0 0 16px 0;
+        }
+
+
+        /* NODES (Fast Render) */
+        .node {
+            position: absolute;
+            width: 170px;
+            padding: 20px;
+            background: #1e293b;
+            /* Fallback for no gradient perf */
+            background: linear-gradient(180deg, #334155, #1e293b);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 20;
+            /* PERFORMANCE: Minimal shadow */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            /* Only animate expensive props if needed, mostly color here */
+            transition: border-color 0.15s, background-color 0.15s;
+        }
+
+        .node.active-node {
+            border-color: #fff;
+            background-color: #475569;
+            /* Simple glow via border or layout safe box-shadow */
+        }
+
+        .node i {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: #cbd5e1;
+        }
+
+        .node.active-node i {
+            color: #fff;
+        }
+
+        .node-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .node-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            line-height: 1.3;
+        }
+
+        /* BADGES */
+        .step {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            background: #1e293b;
+            border: 2px solid #64748b;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            z-index: 30;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .step.active-step {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="viewport-scaler" id="scaler">
+        <div class="diagram-wrapper">
+
+            <div class="header">
+                <h1 class="main-title">HEXZYON SDLC WORKFLOW</h1>
+            </div>
+
+            <!-- 
+            LAYOUT REFACTOR: WIDE MODE
+            Total Width: 1900px
+            Zone 1: 450px wide (Expanded)
+            Zone 2: 380px wide (Shift +70)
+            Zone 3: 380px wide (Shift +70)
+            Zone 4: 400px wide (Shift +70)
+        -->
+
+            <!-- Zone 1: Dev Zone (450px) -->
+            <div class="zone" style="top: 150px; left: 50px; width: 450px; height: 500px;">
+                <div class="zone-corner zc-tl"></div>
+                <div class="zone-corner zc-tr"></div>
+                <div class="zone-corner zc-bl"></div>
+                <div class="zone-corner zc-br"></div>
+                <div class="zone-label" style="color: var(--neon-emerald)"><span>Dev Zone</span></div>
+            </div>
+
+            <!-- Zone 2: Lab (Left: 550) -->
+            <div class="zone" style="top: 150px; left: 550px; width: 380px; height: 800px;">
+                <div class="zone-corner zc-tl"></div>
+                <div class="zone-corner zc-tr"></div>
+                <div class="zone-corner zc-bl"></div>
+                <div class="zone-corner zc-br"></div>
+                <div class="zone-label" style="color: var(--neon-amber)"><span>Hexzyon-Lab Org</span></div>
+            </div>
+
+            <!-- Zone 3: Upstream (Left: 980) -->
+            <div class="zone" style="top: 150px; left: 980px; width: 380px; height: 1000px;">
+                <div class="zone-corner zc-tl"></div>
+                <div class="zone-corner zc-tr"></div>
+                <div class="zone-corner zc-bl"></div>
+                <div class="zone-corner zc-br"></div>
+                <div class="zone-label" style="color: var(--neon-cyan)"><span>Hexzyon (Original)</span></div>
+            </div>
+
+            <!-- Zone 4: Infra (Left: 1410) -->
+            <div class="zone" style="top: 150px; left: 1410px; width: 440px; height: 1000px;">
+                <!-- Expanded width slightly too -->
+                <div class="zone-corner zc-tl"></div>
+                <div class="zone-corner zc-tr"></div>
+                <div class="zone-corner zc-bl"></div>
+                <div class="zone-corner zc-br"></div>
+                <div class="zone-label" style="color: var(--neon-violet)"><span>CI/CD & Production</span></div>
+            </div>
+
+
+            <!-- NODES - Y: +40 preserved. X: Shifted for new zones -->
+
+            <!-- Zone 1 Nodes: Dev, Fork, Vercel -->
+            <!-- Dev: Center of 450px zone. 50 + 225 = 275 center. Node width 170. Left = 275 - 85 = 190. -->
+            <div id="node-dev" class="node" style="top: 280px; left: 190px;">
+                <i class="fas fa-laptop-code" style="color: var(--neon-emerald)"></i>
+                <div class="node-title">Developer</div>
+                <div class="node-desc">Codes features</div>
+            </div>
+
+            <!-- Fork & Vercel: Side by Side in 450px space.
+             Gap: 30px. 170+170+30 = 370.  (450-370)/2 = 40px margin.
+             Fork Left: 50 + 40 = 90.
+             Vercel Left: 90 + 170 + 30 = 290. 
+             NO OVERLAP! (90->260 vs 290->460)
+        -->
+            <div id="node-fork" class="node" style="top: 480px; left: 90px;">
+                <i class="fas fa-code-branch"></i>
+                <div class="node-title">Personal Fork</div>
+                <div class="node-desc">Forked from Lab</div>
+            </div>
+            <div id="node-pvercel" class="node" style="top: 480px; left: 290px;">
+                <i class="fas fa-triangle-exclamation"></i>
+                <div class="node-title">Personal Vercel</div>
+                <div class="node-desc">Feature Preview</div>
+            </div>
+
+            <!-- Zone 2 Nodes (Left 550) - Offset roughly +110 inside relative to old 590.
+             Zone Center: 550 + 190 = 740. Node Left: 740 - 85 = 655.
+        -->
+            <div id="node-sec" class="node" style="top: 280px; left: 655px;">
+                <i class="fas fa-user-shield" style="color: var(--neon-rose)"></i>
+                <div class="node-title">Security Eng</div>
+                <div class="node-desc">Reviews & Merges to Lab</div>
+            </div>
+            <div id="node-labrepo" class="node" style="top: 480px; left: 655px;">
+                <i class="fab fa-github"></i>
+                <div class="node-title">Lab Repository</div>
+                <div class="node-desc">Branch: Main<br>Semgrep Connected</div>
+            </div>
+            <div id="node-semgrep" class="node" style="top: 710px; left: 655px;">
+                <i class="fas fa-shield-virus" style="color: var(--neon-amber)"></i>
+                <div class="node-title">Semgrep Scan</div>
+                <div class="node-desc">Vuln Dashboard</div>
+            </div>
+
+            <!-- Zone 3 Nodes (Left 980) 
+             Zone Center: 980 + 190 = 1170. Node Left: 1170 - 85 = 1085.
+        -->
+            <div id="node-senior" class="node" style="top: 280px; left: 1085px;">
+                <i class="fas fa-user-tie" style="color: var(--neon-cyan)"></i>
+                <div class="node-title">Senior Dev</div>
+                <div class="node-desc">Reviews Lab -> Dev PR</div>
+            </div>
+            <div id="node-origrepo" class="node" style="top: 440px; left: 1085px;">
+                <i class="fab fa-github-alt"></i>
+                <div class="node-title">Original Repo</div>
+                <div class="node-desc">Branch: Dev</div>
+            </div>
+            <div id="node-ghcr" class="node" style="top: 620px; left: 1085px;">
+                <i class="fas fa-box-open"></i>
+                <div class="node-title">GHCR</div>
+                <div class="node-desc">Tag: VERSION</div>
+            </div>
+            <div id="node-main" class="node" style="top: 800px; left: 1085px;">
+                <i class="fas fa-code-branch"></i>
+                <div class="node-title">Main Branch</div>
+                <div class="node-desc">Protected</div>
+            </div>
+            <div id="node-devops" class="node" style="top: 980px; left: 1085px;">
+                <i class="fas fa-user-astronaut" style="color: var(--neon-violet)"></i>
+                <div class="node-title">DevOps Eng</div>
+                <div class="node-desc">Approves Dev -> Main</div>
+            </div>
+
+            <!-- Zone 4 Nodes (Left 1410)
+             Zone Center: 1410 + 220 = 1630. Node Left: 1630 - 85 = 1545.
+        -->
+            <div id="node-overcel" class="node" style="top: 280px; left: 1545px;">
+                <i class="fas fa-globe"></i>
+                <div class="node-title">Official Vercel</div>
+                <div class="node-desc">Dev Environment</div>
+            </div>
+            <div id="node-runner" class="node" style="top: 440px; left: 1545px;">
+                <i class="fas fa-microchip"></i>
+                <div class="node-title">Self-Hosted Runner</div>
+                <div class="node-desc">ARM64<br>Build Docker<br>Trivy Scan</div>
+            </div>
+            <div id="node-prod" class="node" style="top: 800px; left: 1545px;">
+                <i class="fas fa-server" style="color: var(--neon-violet)"></i>
+                <div class="node-title">Production</div>
+                <div class="node-desc">Zero Downtime</div>
+            </div>
+
+
+            <!-- CONNECTIONS (Recalculated) -->
+            <svg class="connections">
+                <g id="logic-paths">
+                    <!-- 1. Dev(190+85=275) -> Fork(90+85=175) -->
+                    <!-- M 275 (Dev Center X) -->
+                    <path d="M 275 378 L 275 430 Q 275 450 175 470" class="wire" />
+                    <path id="path-1" d="M 275 378 L 275 430 Q 275 450 175 470" class="stream" />
+
+                    <!-- 2. Fork(175) -> Preview(290+85=375) -->
+                    <path d="M 175 560 Q 175 610 275 610 Q 375 610 375 560" class="wire" />
+                    <path id="path-2" d="M 175 560 Q 175 610 275 610 Q 375 610 375 560" class="stream" />
+
+                    <!-- 3. Dev(275) -> Sec(655+85=740) -->
+                    <path d="M 295 330 L 655 330" class="wire" />
+                    <path id="path-3" d="M 295 330 L 655 330" class="stream" />
+
+                    <!-- 4. Sec(740) -> Lab(740) -->
+                    <path d="M 740 378 L 740 480" class="wire" />
+                    <path id="path-4" d="M 740 378 L 740 480" class="stream" />
+
+                    <!-- 5. Lab(740) -> Semgrep(740) -->
+                    <path d="M 740 580 L 740 710" class="wire" />
+                    <path id="path-5" d="M 740 580 L 740 710" class="stream" />
+
+                    <!-- Loop -->
+                    <path d="M 655 760 L 80 760 L 80 330 L 190 330" class="wire" stroke-dasharray="8,8" opacity="0.2" />
+                    <path d="M 655 760 L 80 760 L 80 330 L 190 330" class="stream" opacity="0.3"
+                        stroke-dasharray="10,10" />
+
+                    <!-- 6. Sec(740) -> Senior(1085+85=1170) -->
+                    <path d="M 825 330 L 1085 330" class="wire" />
+                    <path id="path-6" d="M 825 330 L 1085 330" class="stream" />
+
+                    <!-- 7. Senior(1170) -> Orig(1170) -->
+                    <path d="M 1170 378 L 1170 440" class="wire" />
+                    <path id="path-7" d="M 1170 378 L 1170 440" class="stream" />
+
+                    <!-- 8. Orig(1170) -> Official(1545+85=1630) -->
+                    <path d="M 1255 470 L 1300 470 L 1300 330 L 1545 330" class="wire" />
+                    <path id="path-8" d="M 1255 470 L 1300 470 L 1300 330 L 1545 330" class="stream" />
+
+                    <!-- 9. Orig(1170) -> Runner(1630) -->
+                    <path d="M 1255 490 L 1545 490" class="wire" />
+                    <path id="path-9" d="M 1255 490 L 1545 490" class="stream" />
+
+                    <!-- 10. Runner(1630) -> GHCR(1170) -->
+                    <path d="M 1545 560 C 1450 560 1450 620 1255 650" class="wire" />
+                    <path id="path-10" d="M 1545 560 C 1450 560 1450 620 1255 650" class="stream" />
+
+                    <!-- 11. Orig(1170) -> DevOps(1170) -->
+                    <path d="M 1085 520 C 950 520 950 940 1085 1010" class="wire" stroke-dasharray="4,4" />
+                    <path id="path-11" d="M 1085 520 C 950 520 950 940 1085 1010" class="stream" />
+
+                    <!-- 12. DevOps(1170) -> Main(1170) -->
+                    <path d="M 1170 980 L 1170 900" class="wire" />
+                    <path id="path-12" d="M 1170 980 L 1170 900" class="stream" />
+
+                    <!-- 13. Main(1170) -> Prod(1630) -->
+                    <path d="M 1255 850 L 1545 850" class="wire" />
+                    <path id="path-13" d="M 1255 850 L 1545 850" class="stream" />
+
+                    <!-- 14. Prod(1630) -> GHCR(1170) -->
+                    <path d="M 1545 900 L 1350 900 L 1350 690 L 1255 690" class="wire" stroke-dasharray="4,4" />
+                    <path id="path-14" d="M 1545 900 L 1350 900 L 1350 690 L 1255 690" class="stream" />
+
+                    <!-- 15. GHCR(1170) -> Prod(1630) -->
+                    <path d="M 1255 650 L 1750 650 L 1750 900 L 1715 900" class="wire" stroke-dasharray="4,4" />
+                    <path id="path-15" d="M 1255 650 L 1750 650 L 1750 900 L 1715 900" class="stream" />
+                </g>
+            </svg>
+
+            <!-- BADGES (Attached to new Node coords) -->
+            <div id="step-1" class="step" style="top: 380px; left: 190px;">1</div>
+            <div id="step-2" class="step" style="top: 620px; left: 260px;">2</div>
+            <div id="step-3" class="step" style="top: 310px; left: 470px;">3</div>
+            <div id="step-4" class="step" style="top: 410px; left: 760px;">4</div>
+            <div id="step-5" class="step" style="top: 790px; left: 420px;">5</div>
+            <div id="step-6" class="step" style="top: 310px; left: 930px;">6</div>
+            <div id="step-7" class="step" style="top: 390px; left: 1190px;">7</div>
+            <div id="step-8" class="step" style="top: 340px; left: 1400px;">8</div>
+            <div id="step-9" class="step" style="top: 470px; left: 1400px;">9</div>
+            <div id="step-10" class="step" style="top: 560px; left: 1420px;">10</div>
+            <div id="step-11" class="step" style="top: 750px; left: 1000px;">11</div>
+            <div id="step-12" class="step" style="top: 950px; left: 1105px;">12</div>
+            <div id="step-13" class="step" style="top: 830px; left: 1400px;">13</div>
+            <div id="step-14" class="step" style="top: 920px; left: 1300px;">14</div>
+            <div id="step-15" class="step" style="top: 670px; left: 1700px;">15</div>
+
+        </div>
+    </div>
+
+    <script>
+        function fitDiagram() {
+            const scaler = document.getElementById('scaler');
+            const baseW = 1900;
+            const baseH = 1200;
+
+            const padding = 20;
+            const availW = window.innerWidth - padding;
+            const availH = window.innerHeight - padding;
+
+            const scale = Math.min(availW / baseW, availH / baseH);
+            scaler.style.transform = `scale(${scale})`;
+        }
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(fitDiagram, 50);
+        });
+        fitDiagram();
+
+        const steps = [
+            { id: 1, node: 'node-dev', path: 'path-1' },
+            { id: 2, node: 'node-pvercel', path: 'path-2' },
+            { id: 3, node: 'node-sec', path: 'path-3' },
+            { id: 4, node: 'node-labrepo', path: 'path-4' },
+            { id: 5, node: 'node-semgrep', path: 'path-5' },
+            { id: 6, node: 'node-senior', path: 'path-6' },
+            { id: 7, node: 'node-origrepo', path: 'path-7' },
+            { id: 8, node: 'node-overcel', path: 'path-8' },
+            { id: 9, node: 'node-runner', path: 'path-9' },
+            { id: 10, node: 'node-ghcr', path: 'path-10' },
+            { id: 11, node: 'node-devops', path: 'path-11' },
+            { id: 12, node: 'node-main', path: 'path-12' },
+            { id: 13, node: 'node-prod', path: 'path-13' },
+            { id: 14, node: 'node-ghcr', path: 'path-14' },
+            { id: 15, node: 'node-prod', path: 'path-15' },
+        ];
+
+        let currentStep = 0;
+
+        function animateSequence() {
+            const activeS = document.querySelector('.active-stream-focus');
+            if (activeS) activeS.classList.remove('active-stream-focus');
+
+            const activeN = document.querySelector('.active-node');
+            if (activeN) activeN.classList.remove('active-node');
+
+            const activeSt = document.querySelector('.active-step');
+            if (activeSt) activeSt.classList.remove('active-step');
+
+            const s = steps[currentStep];
+
+            const badge = document.getElementById(`step-${s.id}`);
+            if (badge) badge.classList.add('active-step');
+
+            const node = document.getElementById(s.node);
+            if (node) node.classList.add('active-node');
+
+            const path = document.getElementById(s.path);
+            if (path) path.classList.add('active-stream-focus');
+
+            currentStep = (currentStep + 1) % steps.length;
+        }
+
+        setInterval(animateSequence, 1200);
+        animateSequence();
+    </script>
+
+</body>
+
+</html>
