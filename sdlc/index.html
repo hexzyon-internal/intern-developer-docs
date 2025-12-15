@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HEXZYON SDLC - LOW LATENCY</title>
+    <title>HEXZYON SDLC</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
-        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap"
         rel="stylesheet">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,22 +16,87 @@
     <style>
         :root {
             /* Palette */
-            --bg-void: #0f172a;
+            --bg-deep: #02040a;
+            --bg-surface: #0a0f1c;
+
             --neon-cyan: #22d3ee;
             --neon-emerald: #34d399;
             --neon-violet: #a78bfa;
             --neon-amber: #fbbf24;
             --neon-rose: #f43f5e;
 
-            --text-dim: #e2e8f0;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+
+            /* Fonts */
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        /* Noise Texture */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Aurora Background */
+        .aurora-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .aurora {
+            position: absolute;
+            background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.15), rgba(99, 102, 241, 0.05), transparent 60%);
+            width: 160%;
+            height: 160%;
+            top: -30%;
+            left: -30%;
+            filter: blur(80px);
+            animation: auroraMove 20s infinite alternate ease-in-out;
+            opacity: 0.6;
+        }
+
+        .aurora-secondary {
+            position: absolute;
+            background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.1), transparent 60%);
+            width: 120%;
+            height: 120%;
+            bottom: -20%;
+            right: -20%;
+            filter: blur(100px);
+            animation: auroraMove 25s infinite alternate-reverse ease-in-out;
+            opacity: 0.4;
+        }
+
+        @keyframes auroraMove {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(-50px, 20px) scale(1.1);
+            }
         }
 
         body {
-            background-color: var(--bg-void);
-            /* PERFORMANCE: Simple solid background with single gradient overly */
-            background-image: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 90%);
-            color: var(--text-dim);
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
             margin: 0;
             padding: 0;
             height: 100vh;
@@ -46,31 +111,33 @@
             transform-origin: center center;
             transition: transform 0.2s ease-out;
             width: 1900px;
-            /* INCREASED WIDTH */
             height: 1200px;
             display: flex;
             align-items: center;
             justify-content: center;
             will-change: transform;
-            /* Force GPU layer */
             transform: translateZ(0);
+            z-index: 10;
+            /* Above aurora */
         }
 
         .diagram-wrapper {
             position: relative;
             width: 1900px;
-            /* INCREASED WIDTH */
             height: 1200px;
-            background: rgba(30, 41, 59, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            /* Glassmorphism: darker background, stronger blur */
+            background: rgba(4, 9, 20, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(16px);
             border-radius: 30px;
-            /* PERFORMANCE: Removed main box-shadow */
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.5);
         }
 
         /* Title Area */
         .header {
             position: absolute;
-            top: 20px;
+            top: 40px;
+            /* More spacing */
             left: 0;
             right: 0;
             text-align: center;
@@ -79,14 +146,19 @@
         }
 
         .main-title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 700;
+            font-family: var(--font-serif);
+            font-size: 5rem;
+            /* Larger */
+            font-weight: 400;
+            /* Serif style */
             text-transform: uppercase;
-            letter-spacing: 4px;
+            letter-spacing: 0.05em;
             color: #fff;
-            /* PERFORMANCE: Minimal text shadow */
-            text-shadow: 0 0 5px rgba(6, 182, 212, 0.3);
+            background: linear-gradient(180deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
             margin: 0;
         }
 
@@ -104,8 +176,8 @@
         /* === FAST FLOW LINES === */
         path.wire {
             fill: none;
-            stroke: #334155;
-            /* Slightly darker */
+            stroke: rgba(255, 255, 255, 0.4);
+            /* Much more visible */
             stroke-width: 2;
         }
 
@@ -114,18 +186,14 @@
             stroke: var(--neon-cyan);
             stroke-width: 3;
             stroke-dasharray: 20 40;
-            /* Fewer dashes to render */
             opacity: 0.6;
             animation: streamFlow 4s linear infinite;
-            /* Slower = smoother perception */
             will-change: stroke-dashoffset;
         }
 
         path.stream.active-stream-focus {
             opacity: 1;
-            /* stroke-width: 4; kept same to avoid line jumps */
             stroke: #fff;
-            /* No drop shadow */
             animation: streamFlow 2s linear infinite;
         }
 
@@ -139,8 +207,9 @@
         .zone {
             position: absolute;
             border-radius: 20px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.03);
+            /* Slightly more visible */
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .zone-label {
@@ -149,19 +218,21 @@
             left: 0;
             right: 0;
             text-align: center;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            font-size: 1.8rem;
-            color: #fff;
+            font-family: var(--font-mono);
+            font-weight: 500;
+            font-size: 1.1rem;
+            /* Smaller, cleaner */
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 2px;
             pointer-events: none;
         }
 
         .zone-label span {
-            background: rgba(15, 23, 42, 0.9);
-            padding: 8px 24px;
-            border-radius: 8px;
+            background: rgba(2, 4, 10, 0.8);
+            padding: 6px 16px;
+            border-radius: 100px;
+            /* Pill shape */
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -169,119 +240,123 @@
             position: absolute;
             width: 30px;
             height: 30px;
-            border-color: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.1);
+            /* Subtler */
             border-style: solid;
         }
 
         .zc-tl {
             top: -1px;
             left: -1px;
-            border-width: 3px 0 0 3px;
+            border-width: 1px 0 0 1px;
             border-radius: 16px 0 0 0;
         }
 
         .zc-tr {
             top: -1px;
             right: -1px;
-            border-width: 3px 3px 0 0;
+            border-width: 1px 1px 0 0;
             border-radius: 0 16px 0 0;
         }
 
         .zc-bl {
             bottom: -1px;
             left: -1px;
-            border-width: 0 0 3px 3px;
+            border-width: 0 0 1px 1px;
             border-radius: 0 0 0 16px;
         }
 
         .zc-br {
             bottom: -1px;
             right: -1px;
-            border-width: 0 3px 3px 0;
+            border-width: 0 1px 1px 0;
             border-radius: 0 0 16px 0;
         }
 
 
-        /* NODES (Fast Render) */
+        /* NODES */
         .node {
             position: absolute;
             width: 170px;
-            padding: 20px;
-            background: #1e293b;
-            /* Fallback for no gradient perf */
-            background: linear-gradient(180deg, #334155, #1e293b);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 16px;
+            padding: 24px 20px;
+            background: rgba(15, 23, 42, 0.9);
+            /* Darker, more solid */
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            /* Subtle cyan tint border */
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
             z-index: 20;
-            /* PERFORMANCE: Minimal shadow */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            /* Only animate expensive props if needed, mostly color here */
-            transition: border-color 0.15s, background-color 0.15s;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s;
+        }
+
+        .node:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
         .node.active-node {
-            border-color: #fff;
-            background-color: #475569;
-            /* Simple glow via border or layout safe box-shadow */
+            border-color: var(--text-primary);
+            background-color: rgba(30, 41, 59, 0.8);
         }
 
         .node i {
-            font-size: 2.2rem;
-            margin-bottom: 15px;
-            color: #cbd5e1;
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+            transition: color 0.2s;
         }
 
-        .node.active-node i {
-            color: #fff;
+        .node:hover i {
+            color: var(--text-primary);
         }
 
         .node-title {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
         .node-desc {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            color: #94a3b8;
-            line-height: 1.3;
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
         }
 
         /* BADGES */
         .step {
             position: absolute;
-            width: 36px;
-            height: 36px;
-            background: #1e293b;
-            border: 2px solid #64748b;
-            color: #e2e8f0;
+            width: 28px;
+            height: 28px;
+            background: rgba(2, 4, 10, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-secondary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            font-size: 1.2rem;
-            border-radius: 10px;
+            font-family: var(--font-mono);
+            font-weight: 400;
+            font-size: 0.9rem;
+            border-radius: 50%;
+            /* Circle */
             z-index: 30;
-            transition: background 0.15s, color 0.15s;
-        }
-
-        .step.active-step {
-            background: #fff;
-            color: #000;
-            border-color: #fff;
         }
     </style>
 </head>
 
 <body>
+    <div class="noise-overlay"></div>
+    <div class="aurora-container">
+        <div class="aurora"></div>
+        <div class="aurora-secondary"></div>
+    </div>
 
     <div class="viewport-scaler" id="scaler">
         <div class="diagram-wrapper">
@@ -544,52 +619,8 @@
         });
         fitDiagram();
 
-        const steps = [
-            { id: 1, node: 'node-dev', path: 'path-1' },
-            { id: 2, node: 'node-pvercel', path: 'path-2' },
-            { id: 3, node: 'node-sec', path: 'path-3' },
-            { id: 4, node: 'node-labrepo', path: 'path-4' },
-            { id: 5, node: 'node-semgrep', path: 'path-5' },
-            { id: 6, node: 'node-senior', path: 'path-6' },
-            { id: 7, node: 'node-origrepo', path: 'path-7' },
-            { id: 8, node: 'node-overcel', path: 'path-8' },
-            { id: 9, node: 'node-runner', path: 'path-9' },
-            { id: 10, node: 'node-ghcr', path: 'path-10' },
-            { id: 11, node: 'node-devops', path: 'path-11' },
-            { id: 12, node: 'node-main', path: 'path-12' },
-            { id: 13, node: 'node-prod', path: 'path-13' },
-            { id: 14, node: 'node-ghcr', path: 'path-14' },
-            { id: 15, node: 'node-prod', path: 'path-15' },
-        ];
-
-        let currentStep = 0;
-
-        function animateSequence() {
-            const activeS = document.querySelector('.active-stream-focus');
-            if (activeS) activeS.classList.remove('active-stream-focus');
-
-            const activeN = document.querySelector('.active-node');
-            if (activeN) activeN.classList.remove('active-node');
-
-            const activeSt = document.querySelector('.active-step');
-            if (activeSt) activeSt.classList.remove('active-step');
-
-            const s = steps[currentStep];
-
-            const badge = document.getElementById(`step-${s.id}`);
-            if (badge) badge.classList.add('active-step');
-
-            const node = document.getElementById(s.node);
-            if (node) node.classList.add('active-node');
-
-            const path = document.getElementById(s.path);
-            if (path) path.classList.add('active-stream-focus');
-
-            currentStep = (currentStep + 1) % steps.length;
-        }
-
-        setInterval(animateSequence, 1200);
-        animateSequence();
+        // SEQUENCER REMOVED FOR CONTINUOUS FLOW ONLY
+        // No more active-node / active-stream-focus needed
     </script>
 
 </body>
